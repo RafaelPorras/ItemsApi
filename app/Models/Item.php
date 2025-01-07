@@ -6,7 +6,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-
+use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 class Item extends Model 
 {
@@ -23,7 +23,15 @@ class Item extends Model
         'owner',
         'language',
         'adquisition_date',
-        'status'
+        'status',
+        'publication_date',
+        'author_id',
+        'editorial_id',
+        'genres_id',
+        'category_id',
+        'itemable_id',
+        'itemable_type',
+
     ];
 
     /**
@@ -34,4 +42,11 @@ class Item extends Model
     protected $hidden = [
        
     ];
+
+    /**
+     * Polimorphic relation to obteins the specific item
+     */
+    public function itemable() : MorphTo {
+        return $this->morphTo();
+    }
 }

@@ -19,6 +19,13 @@ return new class extends Migration
             $table->string('language');
             $table->date('adquisition_date');
             $table->string('status');
+            $table->date('publication_date');
+            $table->unsignedBigInteger('author_id')->nullable();
+            $table->unsignedBigInteger('editorial_id')->nullable();
+            $table->unsignedBigInteger('genres_id')->nullable();
+            $table->unsignedBigInteger('category_id')->nullable();
+            $table->unsignedBigInteger('itemable_id');
+            $table->string('itemable_type');
             $table->timestamps();
         });
     }

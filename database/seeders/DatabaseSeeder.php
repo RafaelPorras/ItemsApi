@@ -2,8 +2,13 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use App\Models\BoardGame;
+use App\Models\Book;
+use App\Models\VideoGame;
+use App\Models\Item;
+use App\Models\Film;
+use App\Models\MusicalFormat;
 
 class DatabaseSeeder extends Seeder
 {
@@ -14,6 +19,8 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        // $this->call('UsersTableSeeder');
+         
+         Item::factory(50)->create();
+        
     }
 }
