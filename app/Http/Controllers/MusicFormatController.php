@@ -3,9 +3,14 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Item;
+use App\Traits\ApiResponser;
+use App\Traits\DataResponser;
 
 class MusicFormatController extends Controller
 {
+    use ApiResponser, DataResponser;
+
     /**
      * Create a new controller instance.
      *
@@ -21,6 +26,11 @@ class MusicFormatController extends Controller
      * @return Illuminate\Http\Response
      */
     public function index() {
+
+        $items = Item::all();
+        $music_formats = $this->dataStructure($items)['music'];
+        
+        return $this->successResponse($music_formats);
  
     }
 

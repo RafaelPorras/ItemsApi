@@ -3,9 +3,13 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Item;
+use App\Traits\ApiResponser;
+use App\Traits\DataResponser;
 
 class VideoGameController extends Controller
 {
+    use ApiResponser, DataResponser;
     /**
      * Create a new controller instance.
      *
@@ -14,6 +18,7 @@ class VideoGameController extends Controller
     public function __construct()
     {
         
+        
     }
 
     /**
@@ -21,7 +26,11 @@ class VideoGameController extends Controller
      * @return Illuminate\Http\Response
      */
     public function index() {
- 
+        $items = Item::all();
+
+        $videoGames = $this->dataStructure($items)['video_games'];
+
+        return $this->successResponse($videoGames);
     }
 
 

@@ -22,41 +22,41 @@ $router->put('/items/{item}', 'ItemController@update');
 $router->patch('/items/{item}', 'ItemController@update');
 $router->delete('/items/{item}', 'ItemController@destroy');
 
-$router->get('/boardgame', 'BoardGameController@index');
-$router->post('/boardgame', 'BoardGameController@store');
-$router->get('/boardgame/{boardGame}', 'BoardGameController@show');
-$router->put('/boardgame/{boardGame}', 'BoardGameController@update');
-$router->patch('/boardgame/{boardGame}', 'BoardGameController@update');
-$router->delete('/boardgame/{boardGame}', 'BoardGameController@destroy');
+$router->get('/boardGames', 'BoardGameController@index');
+$router->post('/boardGames', 'BoardGameController@store');
+$router->get('/boardGames/{boardGame}', 'BoardGameController@show');
+$router->put('/boardGames/{boardGame}', 'BoardGameController@update');
+$router->patch('/boardGames/{boardGame}', 'BoardGameController@update');
+$router->delete('/boardGames/{boardGame}', 'BoardGameController@destroy');
 
-$router->get('/book', 'BookController@index');
-$router->post('/book', 'BookController@store');
-$router->get('/book/{book}', 'BookController@show');
-$router->put('/book/{book}', 'BookController@update');
-$router->patch('/book/{book}', 'BookController@update');
-$router->delete('/book/{book}', 'BookController@destroy');
+$router->get('/books', 'BookController@index');
+$router->post('/books', 'BookController@store');
+$router->get('/books/{book}', 'BookController@show');
+$router->put('/books/{book}', 'BookController@update');
+$router->patch('/books{book}', 'BookController@update');
+$router->delete('/books/{book}', 'BookController@destroy');
 
-$router->get('/film', 'FilmController@index');
-$router->post('/film', 'FilmController@store');
-$router->get('/film/{film}', 'FilmController@show');
-$router->put('/film/{film}', 'FilmController@update');
-$router->patch('/film/{film}', 'FilmController@update');
-$router->delete('/film/{film}', 'FilmController@destroy');
+$router->get('/films', 'FilmController@index');
+$router->post('/films', 'FilmController@store');
+$router->get('/films/{film}', 'FilmController@show');
+$router->put('/films/{film}', 'FilmController@update');
+$router->patch('/films/{film}', 'FilmController@update');
+$router->delete('/films/{film}', 'FilmController@destroy');
 
-$router->get('/musicformat', 'MusicFormatController@index');
-$router->post('/musicformat', 'MusicFormatController@store');
-$router->get('/musicformat/{musicFormat}', 'MusicFormatController@show');
-$router->put('/musicformat/{musicFormat}', 'MusicFormatController@update');
-$router->patch('/musicformat/{musicFormat}', 'MusicFormatController@update');
-$router->delete('/musicformat/{musicFormat}', 'MusicFormatController@destroy');
+$router->get('/musicFormats', 'MusicFormatController@index');
+$router->post('/musicFormats', 'MusicFormatController@store');
+$router->get('/musicFormats/{musicFormat}', 'MusicFormatController@show');
+$router->put('/musicFormats/{musicFormat}', 'MusicFormatController@update');
+$router->patch('/musicFormats/{musicFormat}', 'MusicFormatController@update');
+$router->delete('/musicFormats/{musicFormat}', 'MusicFormatController@destroy');
 
 
-$router->get('/videogame', 'VideoGameController@index');
-$router->post('/videogame', 'VideoGameController@store');
-$router->get('/videogame/{videoGame}', 'VideoGameController@show');
-$router->put('/videogame/{videoGame}', 'VideoGameController@update');
-$router->patch('/videogame/{videoGame}', 'VideoGameController@update');
-$router->delete('/videogame/{videoGame}', 'VideoGameController@destroy');
+$router->get('/videoGames', 'VideoGameController@index');
+$router->post('/videoGames', 'VideoGameController@store');
+$router->get('/videoGames/{videoGame}', 'VideoGameController@show');
+$router->put('/videoGames/{videoGame}', 'VideoGameController@update');
+$router->patch('/videoGames/{videoGame}', 'VideoGameController@update');
+$router->delete('/videoGames/{videoGame}', 'VideoGameController@destroy');
 
 
 

@@ -3,9 +3,15 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Item;
+use App\Traits\ApiResponser;
+use App\Traits\DataResponser;
 
 class FilmController extends Controller
 {
+    use ApiResponser;
+    use DataResponser;
+
     /**
      * Create a new controller instance.
      *
@@ -21,6 +27,12 @@ class FilmController extends Controller
      * @return Illuminate\Http\Response
      */
     public function index() {
+
+        $items = Item::all();
+
+        $films = $this->dataStructure($items)['films'];
+
+        return $this->successResponse($films);
  
     }
 

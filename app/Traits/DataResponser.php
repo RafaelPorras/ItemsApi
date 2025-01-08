@@ -41,7 +41,7 @@ trait DataResponser {
                 case 'App\Models\VideoGame':
                     array_push($classifiedItems['video_games'], $mergedItem);
                     break;
-                case 'App\Models\Music':
+                case 'App\Models\MusicalFormat':
                     array_push($classifiedItems['music'], $mergedItem);
                     break;
             }
