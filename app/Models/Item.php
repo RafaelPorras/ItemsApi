@@ -29,8 +29,8 @@ class Item extends Model
         'editorial_id',
         'genres_id',
         'category_id',
-        'itemable_id',
-        'itemable_type',
+        //'itemable_id',
+        //'itemable_type',
 
     ];
 
@@ -40,7 +40,10 @@ class Item extends Model
      * @var string[]
      */
     protected $hidden = [
-       
+       'itemable_id',
+       'itemable_type',
+       'created_at',
+       'updated_at'
     ];
 
     /**

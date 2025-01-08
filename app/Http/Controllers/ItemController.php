@@ -3,9 +3,15 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Traits\ApiResponser;
+use App\Traits\DataResponser;
+
+use App\Models\Item;
 
 class ItemController extends Controller
 {
+    use ApiResponser, DataResponser;
+
     /**
      * Create a new controller instance.
      *
@@ -22,6 +28,11 @@ class ItemController extends Controller
      */
     public function index() {
  
+        $items = Item::all();
+
+        $items = $this->dataStructure($items);
+
+        return $this->successResponse($items);
     }
 
 
