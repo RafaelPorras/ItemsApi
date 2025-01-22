@@ -51,6 +51,9 @@ class BoardGameController extends Controller
          */
 
         $rules = [
+            /**
+             * items data table
+             */
             'title' => 'required|max:255',
             'description' => 'required|max:255',
             'owner' => 'required|max:255',
@@ -63,6 +66,10 @@ class BoardGameController extends Controller
             'editorial_id' => 'required|integer|min:1',
             'genre_id' => 'required|integer|min:1',
             'category_id' => 'required|integer|min:1',
+
+            /**
+             * board_games data table
+             */
             'duration' => 'required|integer|min:1',
             'min_players' => 'required|integer|min:1',
             'max_players' => 'required|integer|min:1',
@@ -131,6 +138,101 @@ class BoardGameController extends Controller
      */
     public function update(Request $request, $boardGame) {
 
+        /**
+         * Rules for the request
+         */
+
+         $rules = [
+            /**
+             * items data table
+             */
+            'title' => 'max:255',
+            'description' => 'max:255',
+            'owner' => 'max:255',
+            'language' => 'max:255',
+            'adquisition_date' => 'date',
+            'status' => 'max:255',
+            'publication_year' => 'integer|min:1',
+            'collection' => 'max:255',
+            'author_id' => 'integer|min:1',
+            'editorial_id' => 'integer|min:1',
+            'genre_id' => 'integer|min:1',
+            'category_id' => 'integer|min:1',
+
+            /**
+             * board_games data table
+             */
+            'duration' => 'integer|min:1',
+            'min_players' => 'integer|min:1',
+            'max_players' => 'integer|min:1',
+        ];
+
+        //Validate the request
+        $this->validate($request, $rules);
+
+        //Find the board game
+        $boardGame = BoardGame::with('item')->findOrFail($boardGame);
+
+        //Attributes for the board game       
+        $boardGameAttributes = ['min_players', 'max_players', 'duration'];
+
+        //Attributes for the related item
+        $itemAttributes = [
+            'title', 'description', 'owner', 'language', 
+            'adquisition_date', 'status', 'publication_year', 
+            'collection', 'author_id', 'editorial_id', 
+            'genre_id', 'category_id'
+        ];
+
+        //Initialize a flag to track changes
+        $changesMade = false;
+
+        //Update the board game attributes
+        foreach($boardGameAttributes as $attribute){
+            if($request->has($attribute) &&
+                $boardGame->$attribute !== 
+                $request->input($attribute)){
+                $boardGame->$attribute = 
+                $request->input($attribute);
+                $changesMade = true;
+            }
+        }
+
+        //Update the related item attributes
+        foreach($itemAttributes as $attribute){
+            if($request->has($attribute) &&
+                $boardGame->item->$attribute !== 
+                $request->input($attribute)){
+                $boardGame->item->$attribute = 
+                $request->input($attribute);
+                $changesMade = true;
+            }
+        }
+
+        //If no changes were made
+        if(!$changesMade){
+            return $this->errorResponse('At least one value must change', Response::HTTP_UNPROCESSABLE_ENTITY);
+        }
+
+        //Save the board game
+        try{
+            DB::transaction(function () use ($boardGame) {
+                // Save the board game
+                $boardGame->save();
+
+                // Save the related item first
+                $boardGame->item->save();
+            });
+
+            return $this->successResponse($boardGame);
+        }
+        catch(Exception $e){
+            return $this->errorResponse($e->getMessage(),
+             Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+
+
+
     }
 
     /**
@@ -139,6 +241,17 @@ class BoardGameController extends Controller
      *
      */
     public function destroy($boardGame) {
+
+        //Find the board game
+        $boardGame = BoardGame::with('item')->findOrFail($boardGame);
+
+        //Delete the related item
+        $boardGame->item->delete();
+
+        //Delete the board game
+        $boardGame->delete();
+
+        return $this->successResponse($boardGame);
 
     }
 

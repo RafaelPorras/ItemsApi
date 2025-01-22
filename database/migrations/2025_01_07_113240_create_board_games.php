@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('board_games', function (Blueprint $table) {
             $table->id();
-            $table->string('duration');
+            $table->integer('duration');
             $table->integer('min_players');
             $table->integer('max_players');
             $table->timestamps();

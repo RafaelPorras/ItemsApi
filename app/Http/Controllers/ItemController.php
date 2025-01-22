@@ -63,7 +63,7 @@ class ItemController extends Controller
      * @return Illuminate\Http\Response
      */
     public function update(Request $request, $item) {
-
+        return $this->errorResponse('You have to use the specific controller for each item type', Response::HTTP_NOT_FOUND);
     }
 
     /**

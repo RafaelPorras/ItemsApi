@@ -53,6 +53,9 @@ class BookController extends Controller
          */
 
         $rules = [
+             /**
+              *  item data table
+              */
             'title' => 'required|max:255',
             'description' => 'required|max:255',
             'owner' => 'required|max:255',
@@ -65,6 +68,10 @@ class BookController extends Controller
             'editorial_id' => 'required|integer|min:1',
             'genre_id' => 'required|integer|min:1',
             'category_id' => 'required|integer|min:1',
+
+            /**
+             * books data table
+             */
             'isbn' => 'required|max:255',
             'pages_number' => 'required|integer|min:1',
         ];
@@ -134,6 +141,104 @@ class BookController extends Controller
      */
     public function update(Request $request, $book) {
 
+        /**
+         * Rules for the request
+         */
+
+         $rules = [
+            /**
+             *  item data table
+             */
+            'title' => 'max:255',
+            'description' => 'max:255',
+            'owner' => 'max:255',
+            'language' => 'max:255',
+            'adquisition_date' => 'date',
+            'status' => 'max:255',
+            'publication_year' => 'integer|min:1',
+            'collection' => 'max:255',
+            'author_id' => 'integer|min:1',
+            'editorial_id' => 'integer|min:1',
+            'genre_id' => 'integer|min:1',
+            'category_id' => 'integer|min:1',
+
+            /**
+             * books data table
+             */
+            'isbn' => 'max:255',
+            'pages_number' => 'integer|min:1',
+        ];
+
+        // Validate the request
+        $this->validate($request, $rules);
+
+        // Find the book
+        $book = Book::with('item')->findOrFail($book);
+
+        // Attributes for the book
+        $bookAttributes = ['isbn', 'pages_number'];
+
+        // Attributes for the related item
+        $itemAttributes = [
+            'title', 'description', 'owner', 'language', 
+            'adquisition_date', 'status', 'publication_year', 
+            'collection', 'author_id', 'editorial_id', 
+            'genre_id', 'category_id'
+        ];
+    
+        // Track if any changes were made
+        $changesMade = false;
+    
+        // Update book attributes
+        foreach ($bookAttributes as $attribute) {
+            if ($request->has($attribute) && 
+                $book->$attribute !== 
+                $request->input($attribute)) {
+                $book->$attribute = 
+                $request->input($attribute);
+                $changesMade = true;
+            }
+        }
+    
+        // Update related item attributes
+        foreach ($itemAttributes as $attribute) {
+            if ($request->has($attribute) && 
+                $book->item->$attribute !== 
+                $request->input($attribute)) {
+                $book->item->$attribute = 
+                $request->input($attribute);
+                $changesMade = true;
+            }
+        }
+
+        // Check if any changes were made
+        if (!$changesMade) {
+            return $this->errorResponse('At least one value must change', 
+            Response::HTTP_UNPROCESSABLE_ENTITY);
+        }
+
+        // Save the changes
+        try{
+            DB::transaction(function () use ($book) {
+                // Save the book
+                $book->save();
+
+                // Save the related item first
+                $book->item->save();
+    
+            });
+
+            return $this->successResponse($book);
+
+        }
+        catch(\Exception $e){
+            return $this->errorResponse($e->getMessage(), 
+            Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+
+
+
+
     }
 
     /**
@@ -142,6 +247,36 @@ class BookController extends Controller
      *
      */
     public function destroy($book) {
+
+        //Find the book
+        $book = Book::with('item')->findOrFail($book);
+
+        //With the transaction method, 
+        //we ensure that if an error occurs, 
+        //the database will rollback to 
+        //its previous state.
+        DB::beginTransaction();
+
+        try{
+
+            //Delete the related item
+            $book->item->delete();
+
+            //delete the book
+            $book->delete();
+
+            //Commit the transaction
+            DB::commit();
+
+            return $this->successResponse($book);
+
+
+        }
+        catch(\Exception $e){
+            DB::rollBack();
+            return $this->errorResponse($e->getMessage(), 
+            Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
 
     }
 

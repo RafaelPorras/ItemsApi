@@ -74,6 +74,7 @@ class MusicFormatController extends Controller
             'format' => 'required|max:255',
          ];
 
+         // Validate the request
          $this->validate($request, $rules);
 
         /**
@@ -135,6 +136,100 @@ class MusicFormatController extends Controller
      */
     public function update(Request $request, $musicFormat) {
 
+         /**
+         * Rules for the request
+         */
+
+         $rules = [
+            /**
+            * items data table
+            */
+           'title' => 'max:255',
+           'description' => 'max:255',
+           'owner' => 'max:255',
+           'language' => 'max:255',
+           'adquisition_date' => 'date',
+           'status' => 'max:255',
+           'publication_year' => 'integer|min:1',
+           'collection' => 'max:255',
+           'author_id' => 'integer|min:1',
+           'editorial_id' => 'integer|min:1',
+           'genre_id' => 'max:255',
+           'category_id' => 'integer|min:1',
+
+           /**
+            * music data table
+            */
+           'format' => 'max:255',
+        ];
+
+        // Validate the request
+        $this->validate($request, $rules);
+
+        //Find the music format
+        $musicFormat = MusicalFormat::with('item')->findOrFail($musicFormat);
+
+        //Attributes for the music format
+        $musicFormatAttributes = ['format'];
+
+        // Attributes for the related item
+        $itemAttributes = [
+            'title', 'description', 'owner', 'language', 
+            'adquisition_date', 'status', 'publication_year', 
+            'collection', 'author_id', 'editorial_id', 
+            'genre_id', 'category_id'
+        ];
+    
+        // Track if any changes were made
+        $changesMade = false;
+
+        // Update musicFormat attributes
+        foreach ($musicFormatAttributes as $attribute) {
+            if ($request->has($attribute) && 
+                $musicFormat->$attribute !== 
+                $request->input($attribute)) {
+                $musicFormat->$attribute = 
+                $request->input($attribute);
+                $changesMade = true;
+            }
+        }
+    
+        // Update related item attributes
+        foreach ($itemAttributes as $attribute) {
+            if ($request->has($attribute) && 
+                $musicFormat->item->$attribute !== 
+                $request->input($attribute)) {
+                $musicFormat->item->$attribute = 
+                $request->input($attribute);
+                $changesMade = true;
+            }
+        }
+
+        // Check if any changes were made
+        if (!$changesMade) {
+            return $this->errorResponse('At least one value must change', 
+            Response::HTTP_UNPROCESSABLE_ENTITY);
+        }
+
+        // Save the changes
+        try{
+            DB::transaction(function () use ($musicFormat) {
+                // Save the book
+                $musicFormat->save();
+
+                // Save the related item first
+                $musicFormat->item->save();
+    
+            });
+
+            return $this->successResponse($musicFormat);
+            
+        }
+        catch(\Exception $e){
+            return $this->errorResponse($e->getMessage(), 
+            Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+
     }
 
     /**
@@ -143,6 +238,34 @@ class MusicFormatController extends Controller
      *
      */
     public function destroy($musicFormat) {
+
+        //Find the music format
+        $musicFormat = MusicalFormat::with('item')->findOrFail($musicFormat);
+
+        //With the transaction method, 
+        //we ensure that if an error occurs, 
+        //the database will rollback to 
+        //its previous state.
+        DB::beginTransaction();
+
+        try{
+
+            // Delete the related item first
+             $musicFormat->item->delete();
+
+            // Delete the music format
+            $musicFormat->delete();
+
+            // Commit the transaction
+            DB::commit();
+
+            return $this->successResponse($musicFormat);
+
+        }
+        catch(\Exception $e){
+            return $this->errorResponse($e->getMessage(), 
+            Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
 
     }
 
