@@ -122,7 +122,7 @@ class FilmController extends Controller
         }
         catch(\Exception $e) {
             DB::rollBack();
-            return $thterorResponse($e->getMessage(), 
+            return $this->errorResponse($e->getMessage(), 
             Response::HTTP_INTERNAL_SERVER_ERROR);
         }
 
