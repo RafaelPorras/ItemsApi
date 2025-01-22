@@ -22,8 +22,7 @@ class FilmFactory extends Factory
     public function definition()
     {
         return [
-           'format' => $this->faker->randomElement(['DVD', 'Blu-Ray', 'VHS']),
-            'director' => $this->faker->name,
+            'format' => $this->faker->randomElement(['DVD', 'Blu-Ray', 'VHS']),
             'age_rating' => $this->faker->randomElement(['G', 'PG', 'PG-13', 'R', 'NC-17']),
             'duration' => $this->faker->numberBetween(60, 180),
             'subtitles' => $this->faker->boolean(),

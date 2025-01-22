@@ -14,9 +14,8 @@ return new class extends Migration
         Schema::create('films', function (Blueprint $table) {
             $table->id();
             $table->string('format');
-            $table->string('director');
             $table->string('age_rating');
-            $table->string('duration');
+            $table->integer('duration');
             $table->string('subtitles');
             $table->timestamps();
         });

@@ -24,14 +24,15 @@ class Item extends Model
         'language',
         'adquisition_date',
         'status',
-        'publication_date',
+        'publication_year',
+        'collection',
         'author_id',
         'editorial_id',
-        'genres_id',
+        'genre_id',
         'category_id',
-        //'itemable_id',
-        //'itemable_type',
-
+        'itemable_id',
+        'itemable_type',
+    
     ];
 
     /**
@@ -40,8 +41,7 @@ class Item extends Model
      * @var string[]
      */
     protected $hidden = [
-       'itemable_id',
-       'itemable_type',
+ 
        'created_at',
        'updated_at'
     ];

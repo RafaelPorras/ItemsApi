@@ -20,7 +20,6 @@ class Film extends Model
      */
     protected $fillable = [
         'format', 
-        'director',
         'age_rating',
         'duration',
         'subtitles',
@@ -37,9 +36,7 @@ class Film extends Model
          'updated_at'
     ];
 
-    /**
-     * Polimorphic relation to obteins the specific item
-     */
+
    /**
      * Polimorphic relation to obteins the specific item
      */
