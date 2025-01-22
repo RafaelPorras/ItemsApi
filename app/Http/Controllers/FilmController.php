@@ -133,7 +133,9 @@ class FilmController extends Controller
      * @return Illuminate\Http\Response
      */
     public function show($film) {
-   
+        $film = Film::with('item')->findOrFail($film);
+
+        return $this->successResponse($film);
     }
 
     /**

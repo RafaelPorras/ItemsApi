@@ -120,7 +120,9 @@ class BoardGameController extends Controller
      * @return Illuminate\Http\Response
      */
     public function show($boardGame) {
-   
+        $boardGame = BoardGame::with('item')->findOrFail($boardGame);
+
+        return $this->successResponse($boardGame);
     }
 
     /**

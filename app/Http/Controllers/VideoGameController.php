@@ -121,7 +121,9 @@ class VideoGameController extends Controller
      * @return Illuminate\Http\Response
      */
     public function show($videoGame) {
-   
+        $videoGame = VideoGame::with('item')->findOrFail($videoGame);
+
+        return $this->successResponse($videoGame);
     }
 
     /**

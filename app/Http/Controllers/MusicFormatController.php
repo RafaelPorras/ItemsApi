@@ -124,7 +124,9 @@ class MusicFormatController extends Controller
      * @return Illuminate\Http\Response
      */
     public function show($musicFormat) {
-   
+        $musicFormat = MusicalFormat::with('item')->findOrFail($musicFormat);
+
+        return $this->successResponse($musicFormat);
     }
 
     /**

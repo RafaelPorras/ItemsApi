@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Models\Item;
 use App\Traits\ApiResponser;
 use App\Traits\DataResponser;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
-use App\Models\Item;
+
+
 
 class ItemController extends Controller
 {
@@ -42,7 +45,7 @@ class ItemController extends Controller
      * @return Illuminate\Http\Response
      */
     public function store(Request $request) {
-
+        return $this->errorResponse('You have to use the specific controller for each item type', Response::HTTP_NOT_FOUND);
     }
 
         /**
@@ -50,7 +53,9 @@ class ItemController extends Controller
      * @return Illuminate\Http\Response
      */
     public function show($item) {
-   
+        $item = Item::findOrFail($item);
+
+        return $this->successResponse($item);
     }
 
     /**
